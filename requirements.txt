@@ -9,3 +9,4 @@ langchain-fireworks
 einops
 fastapi
 uvicorn
+langchain_community
