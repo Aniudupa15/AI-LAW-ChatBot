@@ -7,3 +7,5 @@ faiss-cpu
 streamlit
 langchain-fireworks
 einops
+fastapi
+uvicorn
