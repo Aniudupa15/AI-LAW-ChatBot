@@ -63,7 +63,7 @@ except Exception as e:
 # Input Schema
 class ChatRequest(BaseModel):
     question: str
-    chat_history:list[str]=[]
+    chat_history:str #list[str] = []
 
 # API Endpoint
 @app.post("/chat/")

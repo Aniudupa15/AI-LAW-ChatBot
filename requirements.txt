@@ -10,3 +10,4 @@ einops
 fastapi
 uvicorn
 langchain_community
+langchain_together
