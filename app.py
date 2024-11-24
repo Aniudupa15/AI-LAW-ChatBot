@@ -63,16 +63,21 @@ except Exception as e:
 # Input Schema
 class ChatRequest(BaseModel):
     question: str
-    chat_history:str #list[str] = []
+    chat_history:str
 
 # API Endpoint
 @app.post("/chat/")
 async def chat(request: ChatRequest):
     try:
-        result = qa_chain.invoke(input=request.question)
+        # Prepare the chain input
+        inputs = {
+            "question": request.question,
+            "chat_history": request.chat_history,
+        }
+        result = qa_chain(inputs)
         return {"answer": result["answer"]}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error processing request: {str(e)}")
 
 # Health Check Endpoint
 @app.get("/")
