@@ -4,3 +4,5 @@ faiss-cpu
 langchain
 sentence-transformers
 transformers
+langchain_community
+langchain_together
