@@ -13,18 +13,14 @@ from langchain.chains import ConversationalRetrievalChain
 app = FastAPI(title="LawGPT API", description="Chatbot for Indian Penal Code queries", version="1.0")
 
 # API Key for Together.ai
-TOGETHER_AI_API = os.getenv("TOGETHER_AI_API")
-if not TOGETHER_AI_API:
-    raise RuntimeError("TOGETHER_AI_API key is not set. Please set it as an environment variable.")
+TOGETHER_AI_API = os.getenv("TOGETHER_AI_API", "1c27fe0df51a29edee1bec6b4b648b436cc80cf4ccc36f56de17272d9e663cbd")
 
 # Initialize Embeddings and FAISS
 try:
-    print("Initializing embeddings...")
     embeddings = HuggingFaceEmbeddings(
         model_name="nomic-ai/nomic-embed-text-v1",
         model_kwargs={"trust_remote_code": True, "revision": "289f532e14dbbbd5a04753fa58739e9ba766f3c7"},
     )
-    print("Loading FAISS index...")
     index_path = Path("ipc_vector_db/index.faiss")
     if not index_path.exists():
         raise FileNotFoundError("FAISS index not found. Please generate it and place it in 'ipc_vector_db'.")
@@ -43,23 +39,18 @@ ANSWER:
 prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question", "chat_history"])
 
 # LLM Setup
-try:
-    print("Initializing Together LLM...")
-    llm = Together(
-        model="mistralai/Mistral-7B-Instruct-v0.2",
-        temperature=0.5,
-        max_tokens=1024,
-        together_api_key=TOGETHER_AI_API,
-    )
-except Exception as e:
-    raise RuntimeError(f"Error initializing Together LLM: {str(e)}")
+llm = Together(
+    model="mistralai/Mistral-7B-Instruct-v0.2",
+    temperature=0.5,
+    max_tokens=1024,
+    together_api_key=TOGETHER_AI_API,
+)
 
 # Memory for Conversational Context
 memory = ConversationBufferWindowMemory(k=2, memory_key="chat_history", return_messages=True)
 
 # Conversational Chain
 try:
-    print("Setting up conversational chain...")
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         memory=memory,
@@ -72,23 +63,16 @@ except Exception as e:
 # Input Schema
 class ChatRequest(BaseModel):
     question: str
-    chat_history: list[str] = []  # Default empty chat history
+    chat_history:str #list[str] = []
 
 # API Endpoint
 @app.post("/chat/")
 async def chat(request: ChatRequest):
     try:
-        print(f"Received question: {request.question}")
-        result = qa_chain.invoke(
-            {
-                "context": "",
-                "question": request.question,
-                "chat_history": request.chat_history,
-            }
-        )
+        result = qa_chain.invoke(input=request.question)
         return {"answer": result["answer"]}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing request: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Health Check Endpoint
 @app.get("/")
