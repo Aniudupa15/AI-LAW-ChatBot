@@ -1,6 +1,5 @@
 fastapi
 uvicorn
-faiss-cpu
 sentence-transformers
 transformers
 langchain_together
