@@ -13,7 +13,10 @@ from langchain.chains import ConversationalRetrievalChain
 app = FastAPI(title="LawGPT API", description="Chatbot for Indian Penal Code queries", version="1.0")
 
 # API Key for Together.ai
-TOGETHER_AI_API = os.getenv("TOGETHER_AI_API", "1c27fe0df51a29edee1bec6b4b648b436cc80cf4ccc36f56de17272d9e663cbd")
+TOGETHER_AI_API = os.getenv(
+    "TOGETHER_AI_API", 
+    "1c27fe0df51a29edee1bec6b4b648b436cc80cf4ccc36f56de17272d9e663cbd"
+)
 
 # Initialize Embeddings and FAISS
 try:
@@ -63,16 +66,21 @@ except Exception as e:
 # Input Schema
 class ChatRequest(BaseModel):
     question: str
-    chat_history:str #list[str] = []
+    chat_history: list[str] = []
 
 # API Endpoint
 @app.post("/chat/")
 async def chat(request: ChatRequest):
     try:
-        result = qa_chain.invoke(input=request.question)
+        # Pass both the question and chat history to the chain
+        result = qa_chain.invoke({
+            "input": request.question, 
+            "chat_history": request.chat_history
+        })
+        
         return {"answer": result["answer"]}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error in processing request: {str(e)}")
 
 # Health Check Endpoint
 @app.get("/")
