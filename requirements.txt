@@ -3,7 +3,6 @@ uvicorn
 faiss-cpu
 sentence-transformers
 transformers
-langchain_community
 langchain_together
 einops
 langchain-huggingface
