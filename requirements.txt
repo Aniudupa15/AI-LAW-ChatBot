@@ -5,3 +5,4 @@ transformers
 langchain_together
 einops
 langchain-huggingface
+langchain_community
