@@ -8,6 +8,7 @@ from langchain.prompts import PromptTemplate
 from langchain_together import Together
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.chains import ConversationalRetrievalChain
+import uvicorn  # Import uvicorn for running the app with specific host and port
 
 # Initialize FastAPI
 app = FastAPI(title="LawGPT API", description="Chatbot for Indian Penal Code queries", version="1.0")
@@ -68,7 +69,7 @@ class ChatRequest(BaseModel):
 # API Endpoint
 @app.post("/chat/")
 async def chat(request: ChatRequest):
-    try:
+    try:    
         # Prepare the chain input
         inputs = {
             "question": request.question,
@@ -83,3 +84,7 @@ async def chat(request: ChatRequest):
 @app.get("/")
 async def root():
     return {"message": "LawGPT API is running."}
+
+# Run the FastAPI app with specific host and port
+if __name__ == "__main__":
+    uvicorn.run(app, host=" ", port=8000)  # Replace with your specific IP address
