@@ -3,3 +3,4 @@ uvicorn
 langchain_together
 langchain-huggingface
 langchain_community
+einops
