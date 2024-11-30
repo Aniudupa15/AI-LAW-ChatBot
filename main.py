@@ -3,7 +3,6 @@ import uvicorn
 from app import router as lawgpt_router
 from predict_pipeline import router as bail_reckoner_router
 import os
-import asyncio
 
 app = FastAPI()
 
@@ -20,4 +19,4 @@ async def root():
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
-    uvicorn.run("main:app", host="0.0.0.0", port=port, workers=4)  # Use multiple workers for better resource distribution
+    uvicorn.run("main:app", host="127.0.0.1", port=port)
