@@ -1,13 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import pandas as pd
 import joblib
 import os
-from typing import Dict
-import uvicorn
 
-# Initialize FastAPI app
-app = FastAPI()
+router = APIRouter()
 
 # Define paths for preprocessing objects and model
 preprocessing_path = os.path.join("ipc_vector_db", "preprocessing_objects.pkl")
@@ -35,32 +32,21 @@ class BailInput(BaseModel):
     risk_score: float
     penalty_severity: float
 
-# Endpoint for prediction
-@app.post("/predict-bail")
+@router.post("/predict-bail")
 async def predict_bail(data: BailInput):
     try:
-        # Convert input data to DataFrame
         user_input = pd.DataFrame([data.dict()])
-
-        # Preprocess categorical columns
         for col, encoder in label_encoders.items():
             if col in user_input:
                 user_input[col] = encoder.transform(user_input[col])
-
-        # Preprocess numerical columns
         numerical_columns = ['imprisonment_duration_served', 'risk_score', 'penalty_severity']
         user_input[numerical_columns] = scaler.transform(user_input[numerical_columns])
-
-        # Predict using the model
         result = model.predict(user_input)
-
-        # Prepare response
         prediction = "Eligible for Bail" if result[0] == 1 else "Not Eligible for Bail"
         return {"prediction": prediction}
-
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-# Run the FastAPI app
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+@router.get("/")
+async def root():
+    return {"message": "Bail Reckoner API is running."}
