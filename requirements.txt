@@ -5,3 +5,6 @@ langchain-huggingface
 langchain_community
 scikit-learn
 einops
+pandas
+joblib
+nomic
