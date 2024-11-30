@@ -10,12 +10,19 @@ router = APIRouter()
 preprocessing_path = os.path.join("ipc_vector_db", "preprocessing_objects.pkl")
 model_path = os.path.join("ipc_vector_db", "bail_reckoner_model.pkl")
 
-# Load preprocessing objects and model
-preprocessing_objects = joblib.load(preprocessing_path)
-model = joblib.load(model_path)
+# Lazy loading of models and preprocessing objects (only load when required)
+preprocessing_objects = None
+model = None
 
-label_encoders = preprocessing_objects['label_encoders']
-scaler = preprocessing_objects['scaler']
+def load_models():
+    global preprocessing_objects, model
+    if preprocessing_objects is None:
+        preprocessing_objects = joblib.load(preprocessing_path)
+    if model is None:
+        model = joblib.load(model_path)
+
+label_encoders = preprocessing_objects.get('label_encoders', {})
+scaler = preprocessing_objects.get('scaler', {})
 
 # Define Pydantic model for input data
 class BailInput(BaseModel):
@@ -35,6 +42,7 @@ class BailInput(BaseModel):
 @router.post("/predict-bail")
 async def predict_bail(data: BailInput):
     try:
+        load_models()  # Load models only when the endpoint is hit
         user_input = pd.DataFrame([data.dict()])
         for col, encoder in label_encoders.items():
             if col in user_input:

@@ -14,7 +14,7 @@ router = APIRouter()
 # API Key for Together.ai
 TOGETHER_AI_API = os.getenv("TOGETHER_AI_API", "1c27fe0df51a29edee1bec6b4b648b436cc80cf4ccc36f56de17272d9e663cbd")
 
-# Initialize Embeddings and FAISS
+# Lazy loading of large models (only load embeddings and index when required)
 embeddings = HuggingFaceEmbeddings(
     model_name="nomic-ai/nomic-embed-text-v1",
     model_kwargs={"trust_remote_code": True, "revision": "289f532e14dbbbd5a04753fa58739e9ba766f3c7"},
@@ -34,7 +34,7 @@ ANSWER:
 </s>[INST]"""
 prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question", "chat_history"])
 
-# LLM Setup
+# LLM Setup (Mistral-7B can be memory-heavy; ensure you're using it wisely)
 llm = Together(
     model="mistralai/Mistral-7B-Instruct-v0.2",
     temperature=0.5,
