@@ -18,7 +18,12 @@ async def root():
         "routes": ["/lawgpt", "/bail-reckoner", "/generate-fir"]
     }
 
+# if __name__ == "__main__":
+#     import os
+#     port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
+#     uvicorn.run("main:app", host="192.168.29.133", port=port)
+
 if __name__ == "__main__":
     import os
     port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
-    uvicorn.run("main:app", host="192.168.29.133", port=port)
+    uvicorn.run("main:app", host="192.168.29.93", port=port)

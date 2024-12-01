@@ -4,6 +4,7 @@ from fpdf import FPDF
 from pydantic import BaseModel
 import os
 import uuid
+import httpx
 
 router = APIRouter()
 
@@ -72,3 +73,38 @@ async def download_file(file_name: str):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(file_path, media_type="application/pdf", filename=file_name)
+
+async def get_lawgpt_response(description_offense: str) -> str:
+    """
+    Sends the description_offense to an external service and retrieves the response.
+    """
+    url = "http://192.168.29.93:8000/lawgpt/chat"  # Replace with the actual URL
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, json={"description_offense": description_offense})
+            response.raise_for_status()  # Raise an error for HTTP codes >= 400
+            data = response.json()
+            return data.get("response", description_offense)  # Use original if no response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get response from LawGPT: {str(e)}")
+
+@router.post("/")
+async def generate_fir(details: FIRDetails):
+    try:
+        # Get response from LawGPT for description_offense
+        updated_description = await get_lawgpt_response(details.description_offense)
+        
+        # Replace the description_offense with the processed response
+        details.description_offense = updated_description
+
+        # Generate PDF with the updated description
+        file_path = generate_fir_pdf(details.dict())
+        
+        return {
+            "message": "FIR PDF generated successfully!",
+            "download_url": f"/generate-fir/download/{os.path.basename(file_path)}"
+        }
+    except HTTPException as http_exc:
+        raise http_exc
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
