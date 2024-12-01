@@ -8,3 +8,5 @@ einops
 pandas
 joblib
 nomic
+fpdf
+python-docx
