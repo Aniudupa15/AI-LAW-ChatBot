@@ -19,7 +19,7 @@ embeddings = HuggingFaceEmbeddings(
     model_name="nomic-ai/nomic-embed-text-v1",
     model_kwargs={"trust_remote_code": True, "revision": "289f532e14dbbbd5a04753fa58739e9ba766f3c7"},
 )
-index_path = Path("ipc_vector_db/index.faiss")
+index_path = Path("models/index.faiss")
 if not index_path.exists():
     raise FileNotFoundError("FAISS index not found. Please generate it and place it in 'ipc_vector_db'.")
 db = FAISS.load_local("ipc_vector_db", embeddings, allow_dangerous_deserialization=True)

@@ -62,7 +62,7 @@ async def generate_fir(details: FIRDetails):
         file_path = generate_fir_pdf(details.dict())
         return {
             "message": "FIR PDF generated successfully!",
-            "download_url": f"/generate-fir/download/{os.path.basename(file_path)}"
+            "download_url": f"http://192.168.123.233:8000/generate-fir/download/{os.path.basename(file_path)}"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -78,7 +78,7 @@ async def get_lawgpt_response(description_offense: str) -> str:
     """
     Sends the description_offense to an external service and retrieves the response.
     """
-    url = "http://192.168.29.93:8000/lawgpt/chat"  # Replace with the actual URL
+    url = "http://192.168.123.233:8000/lawgpt/chat"  # Replace with the actual URL
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(url, json={"description_offense": description_offense})
@@ -102,7 +102,7 @@ async def generate_fir(details: FIRDetails):
         
         return {
             "message": "FIR PDF generated successfully!",
-            "download_url": f"/generate-fir/download/{os.path.basename(file_path)}"
+            "download_url": f"http://192.168.123.233:8000/generate-fir/download/{os.path.basename(file_path)}"
         }
     except HTTPException as http_exc:
         raise http_exc

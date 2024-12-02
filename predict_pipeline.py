@@ -7,8 +7,8 @@ import os
 router = APIRouter()
 
 # Define paths for preprocessing objects and model
-preprocessing_path = os.path.join("ipc_vector_db", "preprocessing_objects.pkl")
-model_path = os.path.join("ipc_vector_db", "bail_reckoner_model.pkl")
+preprocessing_path = os.path.join("models", "preprocessing_objects.pkl")
+model_path = os.path.join("models", "bail_reckoner_model.pkl")
 
 # Load preprocessing objects and model with error handling
 try:
