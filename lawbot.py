@@ -13,7 +13,7 @@ from langchain.chains import ConversationalRetrievalChain
 TOGETHER_AI_API = os.getenv("TOGETHER_AI_API", "1c27fe0df51a29edee1bec6b4b648b436cc80cf4ccc36f56de17272d9e663cbd")
 
 # Ensure proper cache directory is available for models
-os.environ['TRANSFORMERS_CACHE'] = '/path/to/writable/directory'
+os.environ['TRANSFORMERS_CACHE'] = '/tmp/cache'
 
 # Initialize FastAPI Router
 router = APIRouter()
