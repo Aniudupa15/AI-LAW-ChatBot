@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from app import router as lawgpt_router
+from lawbot import router as lawgpt_router
 from predict_pipeline import router as bail_reckoner_router
 from fir_pdf_gen import router as fir_router
 
@@ -17,14 +17,3 @@ async def root():
         "message": "API Gateway is running",
         "routes": ["/lawgpt", "/bail-reckoner", "/generate-fir"]
     }
-
-# if __name__ == "__main__":
-#     import os
-#     port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
-#     uvicorn.run("main:app", host="192.168.29.133", port=port)
-
-if __name__ == "__main__":
-    import os
-    port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
-    uvicorn.run("main:app", host="192.168.123.233", port=port)
-    

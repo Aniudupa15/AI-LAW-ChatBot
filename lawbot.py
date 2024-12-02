@@ -22,7 +22,7 @@ embeddings = HuggingFaceEmbeddings(
 index_path = Path("models/index.faiss")
 if not index_path.exists():
     raise FileNotFoundError("FAISS index not found. Please generate it and place it in 'ipc_vector_db'.")
-db = FAISS.load_local("ipc_vector_db", embeddings, allow_dangerous_deserialization=True)
+db = FAISS.load_local("models", embeddings, allow_dangerous_deserialization=True)
 db_retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 4})
 
 # Prompt Template
