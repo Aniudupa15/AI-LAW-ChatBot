@@ -17,3 +17,10 @@ async def root():
         "message": "API Gateway is running",
         "routes": ["/lawgpt", "/bail-reckoner", "/generate-fir"]
     }
+
+if __name__ == "__main__":
+    import os
+    port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set
+
+    # Force the host to localhost only
+    uvicorn.run("main:app", host="127.0.0.1", port=port)
