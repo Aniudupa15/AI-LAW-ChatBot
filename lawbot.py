@@ -8,7 +8,7 @@ from langchain_together import Together
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.chains import ConversationalRetrievalChain
 import os
-
+os.environ['TRANSFORMERS_CACHE'] = '/path/to/writable/directory'
 router = APIRouter()
 
 # API Key for Together.ai
