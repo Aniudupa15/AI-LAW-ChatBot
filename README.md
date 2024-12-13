@@ -19,8 +19,8 @@ Follow these steps to get the API Gateway up and running locally:
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
-cd <project-directory>
+git clone <https://github.com/Aniudupa15/Judica-API.git>
+cd <Judica-API>
 ```
 
 ### 2. Create a Virtual Environment (Recommended)
@@ -49,15 +49,6 @@ Install the required Python libraries using pip:
 pip install -r requirements.txt
 ```
 
-Ensure your `requirements.txt` includes the following dependencies:
-
-```plaintext
-fastapi
-uvicorn
-pydantic
-reportlab  # Required for PDF generation
-```
-
 ### 4. Run the Application
 
 To start the server:
@@ -78,29 +69,6 @@ Once the server is running, the following routes will be available:
 - **`/bail-reckoner`**: Use the Bail Reckoner for bail estimations.
 - **`/generate-fir`**: Generate an FIR in PDF format.
 
-### Example Access
-
-**API Gateway Root:**
-
-Visit [http://localhost:8000/](http://localhost:8000/) to check the server status and see available routes.
-
----
-
-## 📁 Project Structure
-
-The project follows a modular structure for better maintainability:
-
-```plaintext
-.
-├── main.py               # Entry point for the API Gateway
-├── lawbot.py             # Router for LawGPT
-├── predict_pipeline.py   # Router for Bail Reckoner
-├── fir_pdf_gen.py        # Router for Generate FIR
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation
-```
-
----
 
 ## 📡 API Endpoints
 
@@ -118,31 +86,6 @@ The project follows a modular structure for better maintainability:
 - **Prefix**: `/generate-fir`
 - **Tag**: Generate FIR
 - Generates an FIR in PDF format for legal purposes.
-
----
-
-## 🌟 Example Usage
-
-### Check if the API Gateway is running
-
-**Request:**
-
-```http
-GET http://localhost:8000/
-```
-
-**Response:**
-
-```json
-{
-  "message": "API Gateway is running",
-  "routes": ["/lawgpt", "/bail-reckoner", "/generate-fir"]
-}
-```
-
-This confirms that the API Gateway is up and running!
-
----
 
 ## ⚙️ Environment Variables
 
