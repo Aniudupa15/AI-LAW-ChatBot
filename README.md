@@ -19,8 +19,8 @@ Follow these steps to get the API Gateway up and running locally:
 ### 1. Clone the Repository
 
 ```bash
-git clone <https://github.com/Aniudupa15/Judica-API.git>
-cd <Judica-API>
+git clone https://github.com/Aniudupa15/Judica-API.git
+cd Judica-API
 ```
 
 ### 2. Create a Virtual Environment (Recommended)
